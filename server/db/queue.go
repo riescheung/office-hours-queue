@@ -442,6 +442,15 @@ func (s *Server) SetHelpedStatus(ctx context.Context, entry ksuid.KSUID, helped 
 	return err
 }
 
+func (s *Server) SetAwayStatus(ctx context.Context, entry ksuid.KSUID, away bool) error {
+	tx := getTransaction(ctx)
+	_, err := tx.ExecContext(ctx,
+		"UPDATE queue_entries SET queue_entry_status=$1 WHERE id=$2",
+		away, entry,
+	)
+	return err
+}
+
 func (s *Server) RandomizeQueueEntries(ctx context.Context, queue ksuid.KSUID) error {
 	tx := getTransaction(ctx)
 	_, err := tx.ExecContext(ctx,

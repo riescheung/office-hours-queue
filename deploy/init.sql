@@ -142,7 +142,9 @@ CREATE TABLE public.queue_entries (
     active boolean DEFAULT true, -- Nullable so that we can set up unique relation
     removed_by text,
     removed_at timestamp without time zone,
-    helped boolean DEFAULT true NOT NULL
+    helped boolean DEFAULT true NOT NULL,
+    helping boolean DEFAULT false NOT NULL,
+    queue_entry_status boolean DEFAULT false NOT NULL
 );
 
 

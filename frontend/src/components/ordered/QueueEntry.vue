@@ -5,11 +5,7 @@
 				<div class="content">
 					<div class="level icon-row is-mobile">
 						<div class="level-left">
-							<font-awesome-icon
-								icon="user"
-								class="mr-2 level-item"
-								fixed-width
-							/>
+							<font-awesome-icon icon="user" class="mr-2 level-item" fixed-width />
 							<span class="level-item stay-in-container">
 								<strong>{{ name }}</strong>
 							</span>
@@ -18,11 +14,7 @@
 					<span v-if="!anonymous">
 						<div class="level icon-row is-mobile">
 							<div class="level-left">
-								<font-awesome-icon
-									icon="at"
-									class="mr-2 level-item"
-									fixed-width
-								/>
+								<font-awesome-icon icon="at" class="mr-2 level-item" fixed-width />
 								<span class="level-item stay-in-container">{{
 									entry.email
 								}}</span>
@@ -30,42 +22,26 @@
 						</div>
 						<div class="level icon-row is-mobile">
 							<div class="level-left">
-								<font-awesome-icon
-									icon="question"
-									class="mr-2 level-item"
-									fixed-width
-								/>
+								<font-awesome-icon icon="question" class="mr-2 level-item" fixed-width />
 								<span class="level-item stay-in-container">{{
-									entry.description
-								}}</span>
+										entry.description
+									}}</span>
 							</div>
 						</div>
 						<div class="level icon-row is-mobile">
 							<div class="level-left">
-								<font-awesome-icon
-									:icon="queue.config.virtual ? 'link' : 'map-marker'"
-									class="mr-2 level-item"
-									fixed-width
-								/>
-								<p
-									class="level-item"
-									:class="
-										queue.config.virtual
-											? 'link-in-container'
-											: 'stay-in-container'
-									"
-									v-html="location"
-								></p>
+								<font-awesome-icon :icon="queue.config.virtual ? 'link' : 'map-marker'"
+									class="mr-2 level-item" fixed-width />
+								<p class="level-item" :class="queue.config.virtual
+										? 'link-in-container'
+										: 'stay-in-container'
+									" v-html="location"></p>
 							</div>
 						</div>
 					</span>
 					<div class="level icon-row is-mobile">
 						<div class="level-left">
-							<font-awesome-icon
-								icon="clock"
-								class="mr-2 level-item"
-								fixed-width
-							/>
+							<font-awesome-icon icon="clock" class="mr-2 level-item" fixed-width />
 							<b-tooltip :label="entry.tooltipTimestamp">
 								<span class="level-item stay-in-container">{{
 									humanizedTimestamp
@@ -75,106 +51,76 @@
 					</div>
 					<div class="level icon-row is-mobile" v-if="entry.priority !== 0">
 						<div class="level-left">
-							<font-awesome-icon
-								icon="sort-numeric-up"
-								class="mr-2 level-item"
-								fixed-width
-								v-if="entry.priority > 0"
-							/>
-							<font-awesome-icon
-								icon="sort-numeric-down"
-								class="mr-2 level-item"
-								fixed-width
-								v-else
-							/>
-							<span class="level-item stay-in-container"
-								>Priority:
-								{{ (entry.priority > 0 ? '+' : '') + entry.priority }}</span
-							>
+							<font-awesome-icon icon="sort-numeric-up" class="mr-2 level-item" fixed-width
+								v-if="entry.priority > 0" />
+							<font-awesome-icon icon="sort-numeric-down" class="mr-2 level-item" fixed-width v-else />
+							<span class="level-item stay-in-container">Priority:
+								{{ (entry.priority > 0 ? '+' : '') + entry.priority }}</span>
 						</div>
 					</div>
 					<div class="level icon-row is-mobile" v-if="stack">
 						<div class="level-left">
-							<font-awesome-icon
-								icon="times"
-								class="mr-2 level-item"
-								fixed-width
-							/>
+							<font-awesome-icon icon="times" class="mr-2 level-item" fixed-width />
 							<span class="level-item stay-in-container">{{
-								entry.removedBy
-							}}</span>
+									entry.removedBy
+								}}</span>
 						</div>
 					</div>
 					<div v-if="!anonymous">
 						<br />
 						<div class="buttons is-fullwidth">
 							<template v-if="!stack">
-								<button
-									class="button is-success"
-									:class="{ 'is-loading': helpingRequestRunning }"
-									v-on:click="setHelping(true)"
-									v-if="admin && !entry.helping"
-								>
-									<span class="icon"
-										><font-awesome-icon icon="hands-helping"
-									/></span>
+								<button class="button is-success" :class="{ 'is-loading': helpingRequestRunning }"
+									v-on:click="setHelping(true)" v-if="admin && !entry.helping">
+									<span class="icon"><font-awesome-icon icon="hands-helping" /></span>
 									<span>Help</span>
 								</button>
 								<template v-else-if="admin">
-									<button
-										class="button is-success"
-										:class="{ 'is-loading': removeRequestRunning }"
-										v-on:click="removeEntry"
-									>
-										<span class="icon"><font-awesome-icon icon="check"/></span>
+									<button class="button is-success" :class="{ 'is-loading': removeRequestRunning }"
+										v-on:click="removeEntry">
+										<span class="icon"><font-awesome-icon icon="check" /></span>
 										<span>Done</span>
 									</button>
-									<button
-										class="button is-danger"
-										:class="{ 'is-loading': helpingRequestRunning }"
-										v-on:click="setHelping(false)"
-									>
-										<span class="icon"><font-awesome-icon icon="undo"/></span>
+									<button class="button is-danger" :class="{ 'is-loading': helpingRequestRunning }"
+										v-on:click="setHelping(false)">
+										<span class="icon"><font-awesome-icon icon="undo" /></span>
 										<span>Undo</span>
 									</button>
 								</template>
-								<button
-									class="button is-danger"
-									:class="{ 'is-loading': removeRequestRunning }"
-									v-on:click="removeEntry"
-									v-else-if="!entry.helping"
-								>
-									<span class="icon"><font-awesome-icon icon="times"/></span>
+								<!-- TODO: How to make it only show up on the student side.... -->
+								<button class="button is-warning" :class="{ 'is-loading': awayRequestRunning }"
+									v-if="!admin && !entry.helping && !entry.away" v-on:click="setAway">
+									<span class="icon"><font-awesome-icon icon="clock" /></span>
+									<span>Away</span>
+								</button>
+								<button class="button is-warning" :class="{ 'is-loading': awayRequestRunning }"
+									v-if="!admin && !entry.helping && entry.away" v-on:click="setAway">
+									<span class="icon"><font-awesome-icon icon="undo" /></span>
+									<span>Not Away</span>
+								</button>
+								<button class="button is-danger" :class="{ 'is-loading': removeRequestRunning }"
+									v-on:click="removeEntry" v-if="admin || !entry.helping">
+									<span class="icon"><font-awesome-icon icon="times" /></span>
 									<span>Cancel</span>
 								</button>
 							</template>
 							<template v-if="!entry.pinned && admin">
-								<button
-									class="button is-primary"
-									:class="{ 'is-loading': pinEntryRequestRunning }"
-									v-on:click="pinEntry"
-								>
-									<span class="icon"
-										><font-awesome-icon icon="thumbtack"
-									/></span>
+								<button class="button is-primary" :class="{ 'is-loading': pinEntryRequestRunning }"
+									v-on:click="pinEntry">
+									<span class="icon"><font-awesome-icon icon="thumbtack" /></span>
 									<span>Pin</span>
 								</button>
 							</template>
 							<template v-if="stack && entry.helped">
-								<button
-									class="button is-danger"
-									:class="{ 'is-loading': notHelpedRequestRunning }"
-									@click="setNotHelped"
-								>
-									<span class="icon"
-										><font-awesome-icon icon="frown-open"
-									/></span>
+								<button class="button is-danger" :class="{ 'is-loading': notHelpedRequestRunning }"
+									@click="setNotHelped">
+									<span class="icon"><font-awesome-icon icon="frown-open" /></span>
 									<span>Not helped</span>
 								</button>
 							</template>
 							<template v-if="admin">
 								<button class="button is-warning" @click="messageUser">
-									<span class="icon"><font-awesome-icon icon="envelope"/></span>
+									<span class="icon"><font-awesome-icon icon="envelope" /></span>
 									<span>Message</span>
 								</button>
 							</template>
@@ -185,68 +131,39 @@
 			<figure class="media-right" style="padding: 0">
 				<transition-group name="slide-fade" mode="out-in">
 					<div class="is-pulled-right" key="online" v-if="admin">
-						<b-tooltip
-							:label="
-								'This student is currently ' +
+						<b-tooltip :label="'This student is currently ' +
 									(entry.online ? 'online' : 'offline') +
 									'.'
-							"
-							:class="{
-								'is-success': entry.online,
-								'is-danger': !entry.online,
-							}"
-							position="is-left"
-						>
-							<font-awesome-icon
-								:style="{
+									" :class="{
+									'is-success': entry.online,
+									'is-danger': !entry.online,
+								}" position="is-left">
+							<font-awesome-icon :style="{
 									color: entry.online
 										? 'hsl(141, 53%, 53%)'
 										: 'hsl(348, 100%, 61%)',
-								}"
-								class="is-size-6 ml-3"
-								icon="circle"
-								fixed-width
-							/>
+								}" class="is-size-6 ml-3" icon="circle" fixed-width />
 						</b-tooltip>
 					</div>
 					<div class="is-pulled-right" key="pinned" v-if="entry.pinned">
-						<b-tooltip
-							label="This student is pinned to the top of the queue."
-							position="is-left"
-						>
-							<font-awesome-icon
-								class="is-size-1 is-size-6-touch"
-								icon="thumbtack"
-								fixed-width
-							/>
+						<b-tooltip label="This student is pinned to the top of the queue." position="is-left">
+							<font-awesome-icon class="is-size-1 is-size-6-touch" icon="thumbtack" fixed-width />
 						</b-tooltip>
 					</div>
 					<div class="is-pulled-right" key="helping" v-if="entry.helping">
-						<b-tooltip
-							label="This student is currently being helped."
-							position="is-left"
-						>
-							<font-awesome-icon
-								class="is-size-1 is-size-6-touch"
-								icon="chalkboard-teacher"
-								fixed-width
-							/>
+						<b-tooltip label="This student is currently being helped." position="is-left">
+							<font-awesome-icon class="is-size-1 is-size-6-touch" icon="chalkboard-teacher"
+								fixed-width />
 						</b-tooltip>
 					</div>
-					<div
-						class="is-pulled-right"
-						key="not-helped"
-						v-if="stack && !entry.helped"
-					>
-						<b-tooltip
-							label="This student wasn't able to be helped."
-							position="is-left"
-						>
-							<font-awesome-icon
-								icon="frown-open"
-								class="is-size-1 is-size-6-touch"
-								fixed-width
-							/>
+					<div class="is-pulled-right" key="not-helped" v-if="stack && !entry.helped">
+						<b-tooltip label="This student wasn't able to be helped." position="is-left">
+							<font-awesome-icon icon="frown-open" class="is-size-1 is-size-6-touch" fixed-width />
+						</b-tooltip>
+					</div>
+					<div class="is-pulled-right" key="away" v-if="!stack && entry.away">
+						<b-tooltip label="This student is currently away." position="is-left">
+							<font-awesome-icon icon="clock" class="is-size-1 is-size-6-touch" fixed-width />
 						</b-tooltip>
 					</div>
 				</transition-group>
@@ -345,7 +262,7 @@ export default class QueueEntryDisplay extends Vue {
 		this.removeRequestRunning = true;
 		fetch(
 			process.env.BASE_URL +
-				`api/queues/${this.queue.id}/entries/${this.entry.id}`,
+			`api/queues/${this.queue.id}/entries/${this.entry.id}`,
 			{
 				method: 'DELETE',
 			}
@@ -357,12 +274,34 @@ export default class QueueEntryDisplay extends Vue {
 		});
 	}
 
+
+	awayRequestRunning = false; // To handle the loading state for the 'Away' button
+	setAway() {
+		if (this.awayRequestRunning) {
+			console.log("Request is already running");
+			return; // Prevents multiple simultaneous requests
+		}
+		this.awayRequestRunning = true;
+		console.log("Setting status to Away for entry:", this.entry.id);
+		fetch(
+			process.env.BASE_URL + `api/queues/${this.queue.id}/entries/${this.entry.id}/away`,
+			{
+				method: 'PUT'
+			}
+		).then(res => {
+			this.awayRequestRunning = false; // Reset the loading state
+			if (res.status !== 204) {
+				return ErrorDialog(res);
+			}
+		});
+	}
+
 	pinEntryRequestRunning = false;
 	pinEntry() {
 		this.pinEntryRequestRunning = true;
 		fetch(
 			process.env.BASE_URL +
-				`api/queues/${this.queue.id}/entries/${this.entry.id}/pin`,
+			`api/queues/${this.queue.id}/entries/${this.entry.id}/pin`,
 			{
 				method: 'POST',
 			}
@@ -385,7 +324,7 @@ export default class QueueEntryDisplay extends Vue {
 		this.helpingRequestRunning = true;
 		fetch(
 			process.env.BASE_URL +
-				`api/queues/${this.queue.id}/entries/${this.entry.id}/helping?helping=${helping}`,
+			`api/queues/${this.queue.id}/entries/${this.entry.id}/helping?helping=${helping}`,
 			{
 				method: 'PUT',
 			}
@@ -402,7 +341,7 @@ export default class QueueEntryDisplay extends Vue {
 		this.notHelpedRequestRunning = true;
 		fetch(
 			process.env.BASE_URL +
-				`api/queues/${this.queue.id}/entries/${this.entry.id}/helped`,
+			`api/queues/${this.queue.id}/entries/${this.entry.id}/helped`,
 			{
 				method: 'DELETE',
 			}

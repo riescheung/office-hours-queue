@@ -67,6 +67,7 @@ type QueueEntry struct {
 	RemovedBy   sql.NullString `json:"-" db:"removed_by"`
 	RemovedAt   sql.NullTime   `json:"-" db:"removed_at"`
 	Helped      bool           `json:"-" db:"helped"`
+	Away      	bool           `json:"away" db:"queue_entry_status"` // Added status field
 }
 
 func (q *QueueEntry) RemovedEntry() *RemovedQueueEntry {
@@ -85,6 +86,7 @@ func (q *QueueEntry) RemovedEntry() *RemovedQueueEntry {
 		RemovedBy:   q.RemovedBy.String,
 		RemovedAt:   q.RemovedAt.Time,
 		Helped:      q.Helped,
+		Away:		 q.Away,
 	}
 }
 
@@ -127,6 +129,7 @@ type RemovedQueueEntry struct {
 	RemovedAt   time.Time    `json:"removed_at" db:"removed_at"`
 	Helped      bool         `json:"helped" db:"helped"`
 	Helping     bool         `json:"-" db:"helping"`
+	Away		bool		 `json:"away" db:"queue_entry_status"`
 }
 
 func (q *RemovedQueueEntry) MarshalJSON() ([]byte, error) {

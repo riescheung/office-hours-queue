@@ -81,6 +81,7 @@ type queueStore interface {
 	getQueueGroups
 	updateQueueGroups
 	setNotHelped
+	setAway
 	queueStats
 
 	getAppointment
@@ -225,6 +226,9 @@ func New(q queueStore, logger *zap.SugaredLogger, sessionsStore *sql.DB, oauthCo
 
 			// Set student not helped (queue admin)
 			r.With(s.EnsureCourseAdmin).Method("DELETE", "/{entry_id:[a-zA-Z0-9]{27}}/helped", s.SetNotHelped(q))
+
+			// Set student status
+			r.Method("PUT", "/{entry_id:[a-zA-Z0-9]{27}}/away", s.SetAway(q))
 
 			// Randomize queue (course admin)
 			r.With(s.ValidLoginMiddleware, s.EnsureCourseAdmin).Method("POST", "/randomize", s.RandomizeQueueEntries(q))

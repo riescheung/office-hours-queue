@@ -1513,3 +1513,69 @@ func (s *Server) SetNotHelped(sh setNotHelped) E {
 		return s.sendResponse(http.StatusNoContent, nil, w, r)
 	}
 }
+
+// Define the statusSetter interface with the required methods
+type setAway interface {
+	getQueueEntry
+	SetAwayStatus(ctx context.Context, entry ksuid.KSUID, away bool) error
+}
+
+// SetAway updates the status of a student in the queue
+func (s *Server) SetAway(sh setAway) E {
+	return func(w http.ResponseWriter, r *http.Request) error {
+		q := r.Context().Value(queueContextKey).(*Queue)
+		id := chi.URLParam(r, "entry_id")
+		email := r.Context().Value(emailContextKey).(string)
+		l := s.logger.With(
+			RequestIDContextKey, r.Context().Value(RequestIDContextKey),
+			"entry_id", id,
+			"queue_id", q.ID,
+			"course_id", q.Course,
+			"email", email,
+		)
+
+		entryID, err := ksuid.Parse(id)
+		if err != nil {
+			l.Warnw("failed to parse entry ID", "err", err)
+			return StatusError{
+				http.StatusNotFound,
+				"Unable to find the specified queue entry.",
+			}
+		}
+
+		entry, err := sh.GetQueueEntry(r.Context(), entryID, true)
+		if err != nil {
+			l.Warnw("attempted to get non-existent queue entry with valid ksuid", "err", err)
+			return StatusError{
+				http.StatusNotFound,
+				"Unable to find the specified queue entry.",
+			}
+		}
+
+		if entry.Away {
+			err = sh.SetAwayStatus(r.Context(), entryID, false)
+			if err != nil {
+				l.Errorw("failed to update student status", "err", err)
+				return err
+			}
+			entry.Away = false
+			l.Infow("student status updated", "new_status", false)
+
+		} else {
+				err = sh.SetAwayStatus(r.Context(), entryID, true)
+				if err != nil {
+					l.Errorw("failed to update student status", "err", err)
+					return err
+				}
+				entry.Away = true
+				l.Infow("student status updated", "new_status", true)
+			}
+		
+		l.Infow("Entry status", "entry.Away", entry.Away)
+		// Publishing changes to WebSocket topics
+		s.ps.Pub(WS("ENTRY_UPDATE", entry), QueueTopicAdmin(q.ID))
+		s.ps.Pub(WS("ENTRY_UPDATE", entry), QueueTopicEmail(q.ID, entry.Email))
+			
+		return s.sendResponse(http.StatusNoContent, nil, w, r)
+	}
+}
